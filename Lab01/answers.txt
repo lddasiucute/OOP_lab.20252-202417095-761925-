@@ -1,0 +1,2 @@
+1. If user presses Cancel → program may return null.
+2. Can customize options using JOptionPane.showOptionDialog()
