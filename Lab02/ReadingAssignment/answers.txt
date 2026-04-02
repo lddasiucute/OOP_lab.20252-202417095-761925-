@@ -1,0 +1,48 @@
+Lab 02 - answers.txt
+
+Section 10: Constructor Question
+Q: If you create a constructor method to build a DVD by title, then another to build by category.
+   Does Java allow this?
+
+A: NO. Java does NOT allow two constructors with the same signature.
+   Both constructors would have the signature: DigitalVideoDisc(String x)
+   Since Java identifies overloaded constructors by their parameter types (not names),
+   having two constructors that each take a single String is a compile-time error.
+   To distinguish them, you must use different numbers or types of parameters.
+
+Section 15: Passing Parameter Questions 
+Q: Is Java a Pass by Value or Pass by Reference programming language?
+A: Java is ALWAYS Pass by Value.
+
+Q: After swap(jungleDVD, cinderellaDVD), why do the titles remain unchanged?
+A: Because Java passes the VALUE of the reference (i.e., the memory address stored in the
+   variable), not the variable itself. Inside swap(), o1 and o2 are local copies of those
+   addresses. Reassigning o1 = o2 only changes the local copies — the original variables
+   jungleDVD and cinderellaDVD in main() still point to their original objects.
+
+Q: After changeTitle(jungleDVD, cinderellaDVD.getTitle()), why does jungleDVD's title change?
+A: The reference copy dvd inside changeTitle() still points to the SAME object as jungleDVD
+   in main(). Calling dvd.setTitle(title) mutates that shared object directly.
+   The line dvd = new DigitalVideoDisc(oldTitle) only rebinds the LOCAL copy of the
+   reference — it does not affect jungleDVD in main(). This demonstrates that while Java
+   passes references by value, you CAN still mutate the object the copied reference points to.
+
+Section 14.1: varargs vs array 
+Q: Compared to an array parameter, which do you prefer for addDigitalVideoDisc?
+A: Varargs (DigitalVideoDisc... dvds) is more convenient for callers because they can pass
+   individual DVDs without explicitly constructing an array:
+       cart.addDigitalVideoDisc(dvd1, dvd2, dvd3);
+   An array parameter requires:
+       cart.addDigitalVideoDisc(new DigitalVideoDisc[]{dvd1, dvd2, dvd3});
+   However, note that Java does NOT allow both an array overload and a varargs overload with
+   the same element type simultaneously (ambiguous), so in practice you choose one.
+   Preference: varargs for flexibility.
+
+Section 16: Classifier vs Instance Member Summary 
+- nbDigitalVideoDiscs is a static (class) variable: one copy shared by all instances.
+  It tracks how many DVDs have ever been created.
+- id is an instance variable: each DVD object gets its own unique id assigned from
+  nbDigitalVideoDiscs at construction time.
+- Static variables can be accessed without creating an object: DigitalVideoDisc.getNbDigitalVideoDiscs()
+- Instance variables only exist while the object exists.
+===================================================
