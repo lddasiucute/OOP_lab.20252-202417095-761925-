@@ -15,13 +15,13 @@ public class DigitalVideoDisc {
         this.id = nbDigitalVideoDiscs;
     }
 
-    public DigitalVideoDisc(String category, String title, float cost) {
-        this.category = category;
-        this.title = title;
-        this.cost = cost;
-        nbDigitalVideoDiscs++;
-        this.id = nbDigitalVideoDiscs;
-    }
+   public DigitalVideoDisc(String title, String category, float cost) {
+    this.title = title;
+    this.category = category;
+    this.cost = cost;
+    nbDigitalVideoDiscs++;
+    this.id = nbDigitalVideoDiscs;
+}
 
     public DigitalVideoDisc(String title, String category, String director, float cost) {
         this.title = title;
