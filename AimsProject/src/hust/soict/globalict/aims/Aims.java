@@ -12,6 +12,20 @@ public class Aims {
     private static Cart cart = new Cart();
     private static Scanner scanner = new Scanner(System.in);
 
+    private static int getIntInput() {
+        try {
+            if (scanner.hasNextInt()) {
+                return scanner.nextInt();
+            } else {
+                scanner.nextLine();
+                return -1;
+            }
+        } catch (Exception ignored) {
+            scanner.nextLine();
+            return -1;
+        }
+    }
+
     public static void main(String[] args) {
 
         // Sample data
@@ -19,10 +33,14 @@ public class Aims {
         store.addMedia(new DigitalVideoDisc("Avengers", "Action", "Marvel", 120, 25f));
         store.addMedia(new Book("Java Basics", "Education", 15f));
 
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (scanner != null) scanner.close();
+        }));
+
         int choice;
         do {
             showMenu();
-            choice = scanner.nextInt();
+            choice = getIntInput();
             scanner.nextLine();
 
             switch (choice) {
@@ -49,7 +67,7 @@ public class Aims {
 
         do {
             storeMenu();
-            choice = scanner.nextInt();
+            choice = getIntInput();
             scanner.nextLine();
 
             switch (choice) {
@@ -97,7 +115,7 @@ public class Aims {
 
     private static void mediaDetails(Media m) {
         mediaDetailsMenu();
-        int c = scanner.nextInt();
+        int c = getIntInput();
         scanner.nextLine();
 
         if (c == 1) cart.addMedia(m);
@@ -109,7 +127,7 @@ public class Aims {
         System.out.println("1. Add");
         System.out.println("2. Remove");
 
-        int c = scanner.nextInt();
+        int c = getIntInput();
         scanner.nextLine();
 
         if (c == 1) {
@@ -142,7 +160,7 @@ public class Aims {
 
         do {
             cartMenu();
-            choice = scanner.nextInt();
+            choice = getIntInput();
             scanner.nextLine();
 
             switch (choice) {
@@ -162,7 +180,7 @@ public class Aims {
         System.out.println("1. ID");
         System.out.println("2. Title");
 
-        int c = scanner.nextInt();
+        int c = getIntInput();
         scanner.nextLine();
 
         if (c == 1) {
@@ -170,15 +188,22 @@ public class Aims {
             int id = scanner.nextInt();
             scanner.nextLine();
 
-            for (Media m : cart.getItemsOrdered())
-                if (m.getId() == id) System.out.println(m);
-
+            var results = cart.searchById(id);
+            if (results.isEmpty()) {
+                System.out.println("No match found!");
+            } else {
+                results.forEach(System.out::println);
+            }
         } else {
             System.out.print("Title: ");
             String title = scanner.nextLine();
 
-            for (Media m : cart.getItemsOrdered())
-                if (m.isMatch(title)) System.out.println(m);
+            var results = cart.searchByTitle(title);
+            if (results.isEmpty()) {
+                System.out.println("No match found!");
+            } else {
+                results.forEach(System.out::println);
+            }
         }
     }
 
@@ -186,7 +211,7 @@ public class Aims {
         System.out.println("1. Title");
         System.out.println("2. Cost");
 
-        int c = scanner.nextInt();
+        int c = getIntInput();
         scanner.nextLine();
 
         if (c == 1)

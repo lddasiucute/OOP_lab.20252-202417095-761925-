@@ -11,6 +11,7 @@ public abstract class Media {
     public String getTitle() { return title; }
     public float getCost() { return cost; }
     public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
     public boolean isMatch(String title) {
         return this.title.toLowerCase().contains(title.toLowerCase());
@@ -21,6 +22,11 @@ public abstract class Media {
         if (!(o instanceof Media)) return false;
         Media m = (Media) o;
         return this.title.equals(m.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return title != null ? title.hashCode() : 0;
     }
 
     public static final Comparator<Media> COMPARE_BY_TITLE_COST =

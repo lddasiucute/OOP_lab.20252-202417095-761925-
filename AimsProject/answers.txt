@@ -1,0 +1,22 @@
+ LAB 03: OBJECT-ORIENTED TECHNIQUES
+Student Name: Lê Đức Anh
+Student ID: 202417095
+Class: ICT 01 HUST
+1.DEBUGGING AND PASSING PARAMETERS 
+-Swap method fails because Java passes a copy of the reference (pass-by-value). The method swaps local copies, not the original objects in main. 
+-changeTitle works because it uses the reference to access the object's memory and call its setter (setTitle) to modify its data. 
+2. STRING AND STRINGBUILDER
+-String concatenation with "+" in a loop is very slow because String is immutable; each "+" creates a new object. 
+-StringBuilder is much faster because it uses a mutable buffer to append data without creating new objects. 
+-GarbageCreator shows that excessive String creation can lead to memory issues (hanging or crashing), while NoGarbage (using StringBuilder) solves this. 
+3. OVERRIDING EQUALS() METHOD
+-Media equality: Two media are equal if they have the same title. 
+-Track equality: Two tracks are equal if they have the same title and same length. 
+-Non-Media objects: If the passed object is not an instance of Media, equals() returns false to prevent errors. 
+4. POLYMORPHISM 
+-When calling toString() in a loop, Java uses Dynamic Binding. 
+-The JVM looks at the actual type of the object (DVD, CD, or Book) at runtime and calls the correct version of toString() for that specific class. 
+5. COMPARABLE VS COMPARATOR 
+-To use Comparable, the Media class must implement this interface. 
+-Comparable only allows one default sorting rule (natural ordering). 
+-Comparator is better for Lab 03 because it allows users to choose between multiple sorting rules (e.g., sort by Title or sort by Cost). 
