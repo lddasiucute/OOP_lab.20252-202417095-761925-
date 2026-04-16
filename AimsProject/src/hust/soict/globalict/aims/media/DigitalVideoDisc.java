@@ -19,7 +19,8 @@ public class DigitalVideoDisc extends Disc implements Playable {
         System.out.println("Length: " + length);
     }
 
+    @Override
     public String toString() {
-        return "DVD - " + title + " - " + cost;
+        return "DVD - " + title + " - " + category + " - " + director + " - " + length + ": " + cost + " $";
     }
 }

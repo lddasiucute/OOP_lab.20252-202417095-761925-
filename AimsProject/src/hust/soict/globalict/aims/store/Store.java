@@ -19,6 +19,12 @@ public class Store {
     }
 
     public void print() {
-        for (Media m : items) System.out.println(m);
+        System.out.println("========== STORE ITEMS ==========");
+        int index = 1;
+        for (Media m : items) {
+            System.out.println(index + ". " + m.toString());
+            index++;
+        }
+        System.out.println("=================================");
     }
 }

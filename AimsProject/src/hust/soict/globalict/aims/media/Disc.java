@@ -5,4 +5,6 @@ public class Disc extends Media {
     protected String director;
 
     public int getLength() { return length; }
+    public String getDirector() { return director; }
+    public String getCategory() { return category; }
 }

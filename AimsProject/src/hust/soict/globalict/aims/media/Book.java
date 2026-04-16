@@ -15,7 +15,20 @@ public class Book extends Media {
         if (!authors.contains(a)) authors.add(a);
     }
 
+    public void removeAuthor(String a) {
+        if (authors.contains(a)) {
+            authors.remove(a);
+        }
+    }
+
+    @Override
     public String toString() {
-        return "Book - " + title + " - " + cost;
+        String authorList = String.join(", ", authors);
+        return "Book - " + title + " - " + category + " - Authors: [" + authorList + "]: " + cost + " $";
+    }
+
+    
+    public String getCategory() {
+        return category;
     }
 }

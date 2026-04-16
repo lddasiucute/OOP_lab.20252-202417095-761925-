@@ -19,7 +19,44 @@ public class Cart {
     }
 
     public void print() {
-        System.out.println("CART:");
-        for (Media m : items) System.out.println(m);
+        System.out.println("***********************CART***********************");
+        System.out.println("Ordered Items:");
+        
+        int index = 1;
+        for (Media m : items) {
+            System.out.println(index + ". " + m.toString());
+            index++;
+        }
+        
+        System.out.println(String.format("Total cost: %.1f $", getTotalCost()));
+        System.out.println("***************************************************");
+    }
+
+    public ArrayList<Media> searchById(int id) {
+        ArrayList<Media> results = new ArrayList<>();
+        for (Media m : items) {
+            if (m.getId() == id) {
+                results.add(m);
+            }
+        }
+        return results;
+    }
+
+    public ArrayList<Media> searchByTitle(String title) {
+        ArrayList<Media> results = new ArrayList<>();
+        for (Media m : items) {
+            if (m.isMatch(title)) {
+                results.add(m);
+            }
+        }
+        return results;
+    }
+
+    public float getTotalCost() {
+        float total = 0;
+        for (Media m : items) {
+            total += m.getCost();
+        }
+        return total;
     }
 }
