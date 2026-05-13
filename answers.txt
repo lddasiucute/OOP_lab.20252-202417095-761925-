@@ -1,0 +1,60 @@
+LAB 04: GUI Programming with Swing
+
+
+1.3 Compare Swing and AWT elements
+
+
+(a) Top-level containers:
+- AWT: The top-level container is "Frame" (java.awt.Frame).
+- Swing: The top-level container is "JFrame" (javax.swing.JFrame).
+  JFrame is heavyweight at the top level but supports adding 
+  lightweight Swing components via its content pane.
+
+(b) Component class names:
+AWT components and the corresponding Swing components 
+typically differ by the "J" prefix in Swing:
+- Label       -> JLabel
+- Button      -> JButton
+- TextField   -> JTextField
+- TextArea    -> JTextArea
+- Panel       -> JPanel
+- Checkbox    -> JCheckBox
+- Choice      -> JComboBox
+- List        -> JList
+- Menu        -> JMenu
+- MenuBar     -> JMenuBar
+- MenuItem    -> JMenuItem
+- Dialog      -> JDialog
+- Applet      -> JApplet
+
+(c) Adding components:
+- In AWT, components are added directly to the Frame using add().
+- In Swing, lightweight JComponents must be added to the 
+  content pane of the top-level container, retrieved by 
+  getContentPane(), because the JFrame itself is heavyweight.
+
+(d) Event handling:
+The event-handling model is almost identical in both libraries:
+- Both use the delegation event model with listener interfaces 
+  (e.g., ActionListener) from java.awt.event.
+- The same method signatures (e.g., actionPerformed(ActionEvent e)) 
+  are used.
+- Therefore the event-handling code in AWTAccumulator and 
+  SwingAccumulator is exactly the same.
+
+(e) Appearance:
+- AWT components rely on the native peer of the operating system, 
+  so they look like native OS widgets and may differ between 
+  platforms.
+- Swing components are drawn by Java (lightweight) and support 
+  pluggable look-and-feel, so they look consistent across 
+  platforms and can be customized.
+
+(f) Class hierarchy:
+- AWT components extend java.awt.Component (heavyweight).
+- Swing components extend javax.swing.JComponent which itself 
+  extends java.awt.Container (lightweight, except for top-level 
+  containers JFrame/JDialog/JApplet which remain heavyweight).
+
+Conclusion: Swing is more flexible, portable, and customizable 
+than AWT, while keeping a very similar programming model.
