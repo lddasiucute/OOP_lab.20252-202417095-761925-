@@ -58,3 +58,142 @@ The event-handling model is almost identical in both libraries:
 
 Conclusion: Swing is more flexible, portable, and customizable 
 than AWT, while keeping a very similar programming model.
+
+LAB 05: GUI Programming with JavaFX and Exception 
+Handling
+
+3. JavaFX API - Painter app
+
+Structure of a JavaFX application:
+- Stage  : top-level container (window).
+- Scene  : container of UI components, attached to the Stage.
+- Node   : hierarchical scene graph elements within a Scene.
+
+Three steps to build a JavaFX application:
+1. Create the FXML file describing the UI layout.
+2. Create the Controller class with event-handling methods.
+3. Create the Application class extending javafx.application.Application
+   to load the FXML and show it on the Stage.
+
+3.4.1 Draw when mouse down (Painter)
+
+To make the Painter draw a dot on mouse press (not only on 
+drag), the same handler method (drawingAreaMouseDragged) was 
+assigned to BOTH "On Mouse Dragged" and "On Mouse Pressed" 
+events of the drawing Pane in the FXML. No Java code changes 
+were required.
+
+3.4.2 Eraser
+
+Eraser is implemented as a pen using WHITE color (same as 
+canvas color) instead of BLACK. A TitledPane "Tools" with two 
+RadioButtons (Pen, Eraser) sharing the same ToggleGroup lets 
+the user pick the current tool. The controller checks which 
+radio is selected to decide the drawing color.
+
+5-7. AIMS Customer App with JavaFX
+
+Key JavaFX features used:
+
+(a) FXMLLoader + setController:
+   When a Controller needs constructor parameters (e.g. Store, 
+   Cart), we cannot let JavaFX instantiate it automatically. 
+   We create the controller manually and pass it to FXMLLoader 
+   via setController() BEFORE calling load(). The FXML file 
+   must not contain fx:controller in this case to avoid the 
+   "Controller value already specified" exception.
+
+(b) initialize() method:
+   A special method called by JavaFX after the FXML is fully 
+   loaded and @FXML fields are injected. We use it to populate 
+   the GridPane with items and configure the TableView columns.
+
+(c) PropertyValueFactory:
+   Used to bind TableColumn data to a property of the Media 
+   object. For example: new PropertyValueFactory<>("title") 
+   tells the column to call getTitle() on each Media in the 
+   list.
+
+(d) ObservableList:
+   Replaces ArrayList<Media> in Cart so that JavaFX can 
+   automatically observe changes (add/remove) and refresh the 
+   TableView without manual code.
+
+(e) ChangeListener:
+   Used on the TableView's selectedItemProperty to update the 
+   Play/Remove button visibility when the user selects a row. 
+   Also used on the Filter TextField's textProperty to re-apply 
+   the filter every time the user types.
+
+(f) FilteredList:
+   Wraps the ObservableList of cart items. By setting a new 
+   Predicate, the TableView shows only items matching the 
+   filter criteria (by ID or by Title) without modifying the 
+   original list.
+
+(g) Switch scenes:
+   Both Store and Cart share the same Stage. To switch:
+   Stage stage = (Stage) ((Node) event.getSource())
+                          .getScene().getWindow();
+   stage.setScene(new Scene(root));
+   This keeps the same window and only changes its content.
+
+9-11. Exception Handling
+
+PlayerException:
+- Self-defined checked exception, extends java.lang.Exception.
+- Thrown by play() when a media has non-positive length.
+- DigitalVideoDisc.play(), Track.play(), and CompactDisc.play()
+  declare "throws PlayerException".
+- The Playable interface is also updated to declare it.
+- Every call to play() in Aims (console), CartController, 
+  ItemController, MediaStore (Swing), and CartTest is wrapped 
+  in try-catch. The handler displays an error message (via 
+  System.err for console code or via Alert dialog for GUI 
+  code).
+
+LimitExceededException:
+- Self-defined checked exception used in Cart.addMedia() to 
+  prevent the cart from exceeding MAX_NUMBERS_ORDERED items.
+- Every call to cart.addMedia() is wrapped in try-catch to 
+  display a "Cart full" alert.
+
+The "delegation" mechanism is used for constructors / methods 
+that cannot fully handle the error themselves (e.g. Track.play 
+delegates to its caller via "throws"). The "catch" mechanism is 
+used at the user-facing layer (controllers, main methods) to 
+present a friendly message.
+
+12. Media equals() and compareTo()
+
+equals(Object o):
+- Throws NullPointerException if o is null.
+- Throws ClassCastException if o is not a Media.
+- Returns true iff this.title equals other.title AND 
+  this.cost equals other.cost (so two medias are equal when 
+  they share the same title AND the same cost).
+- hashCode() is updated accordingly to remain consistent with 
+  the new equals contract.
+
+compareTo(Media other):
+- Throws NullPointerException if other is null.
+- Compares first by title (ascending), and by cost (descending) 
+  as a tie-breaker.
+- The Media class now implements Comparable<Media>.
+
+14. Exception hierarchy tree (Astah)
+
+The AIMS project defines two self-defined exceptions, both 
+inheriting from java.lang.Exception (checked exceptions):
+
+  Exception
+   |--- PlayerException
+   |--- LimitExceededException
+
+PlayerException        : thrown when a media cannot be played 
+                         (length <= 0).
+LimitExceededException : thrown when the cart exceeds its 
+                         maximum capacity.
+
+The hierarchy diagram is saved in AimsProject/Design/ as 
+"Exception Hierarchy.png".
