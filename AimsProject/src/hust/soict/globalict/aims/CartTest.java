@@ -1,5 +1,7 @@
 package hust.soict.globalict.aims;
 
+import hust.soict.globalict.aims.exception.LimitExceededException;
+import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.cart.Cart;
 import hust.soict.globalict.aims.media.*;
 
@@ -25,11 +27,15 @@ public class CartTest {
         cd1.addTrack(new Track("Something", 183));
         cd1.addTrack(new Track("Maxwell Silver Hammer", 207));
         
-        cart.addMedia(dvd1);
-        cart.addMedia(dvd2);
-        cart.addMedia(book1);
-        cart.addMedia(book2);
-        cart.addMedia(cd1);
+        try {
+    cart.addMedia(dvd1);
+    cart.addMedia(dvd2);
+    cart.addMedia(book1);
+    cart.addMedia(book2);
+    cart.addMedia(cd1);
+} catch (LimitExceededException e) {
+    System.err.println(e.getMessage());
+}
         
         System.out.println("========== Test print() method ==========");
         cart.print();
@@ -59,8 +65,12 @@ public class CartTest {
         cart.removeMedia(dvd1);
         cart.print();
         
-        System.out.println("\n========== Test play() for Playable media ==========");
-        dvd2.play();
-        cd1.play();
+       System.out.println("\n========== Test play() for Playable media ==========");
+        try {
+            dvd2.play();
+            cd1.play();
+        } catch (PlayerException e) {
+            System.err.println("Cannot play: " + e.getMessage());
+        }
     }
 }

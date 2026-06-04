@@ -27,8 +27,4 @@ public class Book extends Media {
         return "Book - " + title + " - " + category + " - Authors: [" + authorList + "]: " + cost + " $";
     }
 
-    
-    public String getCategory() {
-        return category;
-    }
 }

@@ -1,9 +1,12 @@
 package hust.soict.globalict.aims;
 
+import hust.soict.globalict.aims.exception.LimitExceededException;
 import java.util.Collections;
 import java.util.Scanner;
 
 import hust.soict.globalict.aims.cart.Cart;
+import hust.soict.globalict.aims.exception.PlayerException;
+
 import hust.soict.globalict.aims.media.*;
 import hust.soict.globalict.aims.store.Store;
 
@@ -82,23 +85,31 @@ public class Aims {
                     break;
 
                 case 2:
-                    System.out.print("Enter title to add: ");
-                    title = scanner.nextLine();
-                    m = findInStore(title);
-                    if (m != null) {
-                        cart.addMedia(m);
-                        System.out.println("Added!");
-                    }
-                    break;
+    System.out.print("Enter title to add: ");
+    title = scanner.nextLine();
+    m = findInStore(title);
+    if (m != null) {
+        try {
+            cart.addMedia(m);
+            System.out.println("Added!");
+        } catch (LimitExceededException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    break;
 
                 case 3:
-                    System.out.print("Enter title to play: ");
-                    title = scanner.nextLine();
-                    m = findInStore(title);
-                    if (m instanceof Playable) {
-                        ((Playable) m).play();
-                    } else System.out.println("Cannot play!");
-                    break;
+    System.out.print("Enter title to play: ");
+    title = scanner.nextLine();
+    m = findInStore(title);
+    if (m instanceof Playable) {
+        try {
+            ((Playable) m).play();
+        } catch (PlayerException e) {
+            System.err.println("Cannot play: " + e.getMessage());
+        }
+    } else System.out.println("Cannot play!");
+    break;
 
                 case 4:
                     seeCurrentCart();
@@ -114,14 +125,25 @@ public class Aims {
     }
 
     private static void mediaDetails(Media m) {
-        mediaDetailsMenu();
-        int c = getIntInput();
-        scanner.nextLine();
+    mediaDetailsMenu();
+    int c = getIntInput();
+    scanner.nextLine();
 
-        if (c == 1) cart.addMedia(m);
-        else if (c == 2 && m instanceof Playable)
-            ((Playable) m).play();
+    if (c == 1) {
+        try {
+            cart.addMedia(m);
+        } catch (LimitExceededException e) {
+            System.err.println(e.getMessage());
+        }
     }
+    else if (c == 2 && m instanceof Playable) {
+        try {
+            ((Playable) m).play();
+        } catch (PlayerException e) {
+            System.err.println("Cannot play: " + e.getMessage());
+        }
+    }
+}
 
     public static void updateStore() {
         System.out.println("1. Add");
@@ -237,13 +259,19 @@ public class Aims {
     }
 
     private static void playInCart() {
-        System.out.print("Title: ");
-        String title = scanner.nextLine();
+    System.out.print("Title: ");
+    String title = scanner.nextLine();
 
-        for (Media m : cart.getItemsOrdered())
-            if (m.isMatch(title) && m instanceof Playable)
+    for (Media m : cart.getItemsOrdered()) {
+        if (m.isMatch(title) && m instanceof Playable) {
+            try {
                 ((Playable) m).play();
+            } catch (PlayerException e) {
+                System.err.println("Cannot play: " + e.getMessage());
+            }
+        }
     }
+}
 
     public static void storeMenu() {
         System.out.println("\n1. Details");

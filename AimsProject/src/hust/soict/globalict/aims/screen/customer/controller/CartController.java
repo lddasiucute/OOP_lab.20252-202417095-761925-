@@ -3,6 +3,7 @@ package hust.soict.globalict.aims.screen.customer.controller;
 import java.io.IOException;
 
 import hust.soict.globalict.aims.cart.Cart;
+import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.media.Playable;
 import hust.soict.globalict.aims.store.Store;
@@ -160,17 +161,25 @@ public class CartController {
     }
 
     @FXML
-    void btnPlayPressed(ActionEvent event) {
-        Media media = tblMedia.getSelectionModel().getSelectedItem();
-        if (media instanceof Playable) {
+void btnPlayPressed(ActionEvent event) {
+    Media media = tblMedia.getSelectionModel().getSelectedItem();
+    if (media instanceof Playable) {
+        try {
             ((Playable) media).play();
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Playing");
             alert.setHeaderText(null);
             alert.setContentText("Now playing: " + media.getTitle());
             alert.showAndWait();
+        } catch (PlayerException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Cannot play");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
     }
+}
 
     @FXML
     void btnPlaceOrderPressed(ActionEvent event) {
