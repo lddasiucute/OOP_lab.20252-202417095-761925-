@@ -208,19 +208,19 @@ public class Aims {
     }
 
     private static void sortCart() {
-        System.out.println("1. Title");
-        System.out.println("2. Cost");
+    System.out.println("1. Title");
+    System.out.println("2. Cost");
 
-        int c = getIntInput();
-        scanner.nextLine();
+    int c = getIntInput();
+    scanner.nextLine();
 
-        if (c == 1)
-            Collections.sort(cart.getItemsOrdered(), Media.COMPARE_BY_TITLE_COST);
-        else
-            Collections.sort(cart.getItemsOrdered(), Media.COMPARE_BY_COST_TITLE);
+    if (c == 1)
+        cart.getItemsOrdered().sort(Media.COMPARE_BY_TITLE_COST);
+    else
+        cart.getItemsOrdered().sort(Media.COMPARE_BY_COST_TITLE);
 
-        cart.print();
-    }
+    cart.print();
+}
 
     private static void removeFromCart() {
         System.out.print("Title: ");
