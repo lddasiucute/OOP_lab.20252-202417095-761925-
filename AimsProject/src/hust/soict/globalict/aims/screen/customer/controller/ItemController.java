@@ -1,5 +1,7 @@
 package hust.soict.globalict.aims.screen.customer.controller;
 
+import hust.soict.globalict.aims.exception.LimitExceededException;
+import hust.soict.globalict.aims.exception.PlayerException;
 import hust.soict.globalict.aims.cart.Cart;
 import hust.soict.globalict.aims.media.Media;
 import hust.soict.globalict.aims.media.Playable;
@@ -48,24 +50,39 @@ public class ItemController {
     }
 
     @FXML
-    void btnAddToCartClicked(ActionEvent event) {
+void btnAddToCartClicked(ActionEvent event) {
+    try {
         cart.addMedia(media);
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Add to cart");
         alert.setHeaderText(null);
         alert.setContentText("Added: " + media.getTitle());
         alert.showAndWait();
+    } catch (LimitExceededException e) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Cart full");
+        alert.setHeaderText(null);
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
     }
-
-    @FXML
-    void btnPlayClicked(ActionEvent event) {
-        if (media instanceof Playable) {
+}
+@FXML
+void btnPlayClicked(ActionEvent event) {
+    if (media instanceof Playable) {
+        try {
             ((Playable) media).play();
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Playing");
             alert.setHeaderText(null);
             alert.setContentText("Now playing: " + media.getTitle());
             alert.showAndWait();
+        } catch (PlayerException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Cannot play");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
     }
+}
 }

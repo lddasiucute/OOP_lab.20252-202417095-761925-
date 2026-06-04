@@ -1,5 +1,6 @@
 package hust.soict.globalict.aims.screen.manager;
 
+import hust.soict.globalict.aims.exception.PlayerException;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -34,16 +35,23 @@ public class MediaStore extends JPanel {
 
         // Only show "Play" button if media is Playable
         if (media instanceof Playable) {
-            JButton playButton = new JButton("Play");
-            playButton.addActionListener(e -> {
-                JOptionPane.showMessageDialog(null,
-                        "Now playing: " + media.getTitle(),
-                        "Play Media",
-                        JOptionPane.INFORMATION_MESSAGE);
-                ((Playable) media).play();
-            });
-            container.add(playButton);
+    JButton playButton = new JButton("Play");
+    playButton.addActionListener(e -> {
+        try {
+            ((Playable) media).play();
+            JOptionPane.showMessageDialog(null,
+                    "Now playing: " + media.getTitle(),
+                    "Play Media",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (PlayerException ex) {
+            JOptionPane.showMessageDialog(null,
+                    ex.getMessage(),
+                    "Cannot play",
+                    JOptionPane.ERROR_MESSAGE);
         }
+    });
+    container.add(playButton);
+}
 
         this.add(Box.createVerticalGlue());
         this.add(title);
